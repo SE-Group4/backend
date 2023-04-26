@@ -11,8 +11,8 @@ This is a chat application built with Django that allows users to join group cha
 - Users can upload files and images in group chats.
 
 ## Installation
-1. Clone this repository: `git clone https://github.com/your-username/group-chat.git`.
-2. Change into the project directory: `cd group-chat`.
+1. Clone this repository: `git clone https://github.com/your-username/backend.git`.
+2. Change into the project directory: `cd backend`.
 3. Create a virtual environment: `python3 -m venv env`.
 4. Activate the virtual environment: `source env/bin/activate` (on Unix-based systems) or `env\Scripts\activate` (on Windows).
 5. Install the project dependencies: `pip install -r requirements.txt`.
@@ -31,6 +31,3 @@ This is a chat application built with Django that allows users to join group cha
 
 ## Contributing
 If you'd like to contribute to this project, please fork the repository and create a new branch for your feature or bug fix. Then, submit a pull request with your changes for review.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
