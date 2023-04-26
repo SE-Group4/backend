@@ -21,11 +21,13 @@ class Message(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        db_table = 'chat_message'
-        managed = False
-        app_label = 'chat'
-        using = 'mongodb'
+    def __str__(self):
+        return self.author
+    # class Meta:
+    #     db_table = 'chat_message'
+    #     managed = False
+    #     app_label = 'chat'
+    #     using = 'mongodb'
 
     def __str__(self):
         return f'{self.author.username} in {self.room.name}: {self.content}'
