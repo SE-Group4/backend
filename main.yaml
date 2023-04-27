@@ -1,24 +1,70 @@
-name: StudBud CI
+name: Deploy To Production
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Run tests
-      run: python manage.py test
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Set up PostgreSQL
+        uses: docker-compose@1.29.2
+        with:
+          config: |
+            version: '3.7'
+            services:
+              db:
+                image: postgres
+                environment:
+                  POSTGRES_USER: 
+                  POSTGRES_PASSWORD: 
+                  POSTGRES_DB: studybuddy
+                ports:
+                  - '5432:5432'
+                volumes:
+                  - type: volume
+                    source: postgres_data
+                    target: /var/lib/postgresql/data
+            volumes:
+              postgres_data:
+      - name: Apply Database Migrations
+        run: |
+          source .venv/bin/activate
+          python manage.py migrate
+      - name: Collect Static Files
+        run: |
+          source .venv/bin/activate
+          python manage.py collectstatic --noinput
+      - name: Run Tests
+        run: |
+          source .venv/bin/activate
+          python manage.py test
+      - name: Deploy Application
+        uses: appleboy/ssh-action@main
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd /studbud
+            git pull origin main
+            source .venv/bin/activate
+            pip install -r requirements.txt
+            python manage.py migrate
+            python manage.py collectstatic --noinput
+            sudo systemctl restart studbud
