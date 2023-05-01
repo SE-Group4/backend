@@ -2,6 +2,12 @@
 
 This is a chat application built with Django that allows users to join group chats and send private messages to other users.
 
+## Tech Stack
+- Django Restframework
+- Channels
+- Websocket
+- Django restframework redis
+
 ## Features
 - Users can create an account and log in.
 - Users can join or create a group chat and send messages to all participants in the group.
