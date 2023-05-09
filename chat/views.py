@@ -40,4 +40,11 @@ def send_message(request):
         return Response(RoomMessageSerializer(room_message).data)
     else:
         return Response(serializer.errors, status=400)
-
+    
+    
+@api_view(['GET'])
+def receive_message(request):
+    messages = RoomMessage.objects.all()
+    for data in messages:
+        serialize_data = RoomMessageSerializer(data)
+        return Reponse(serializer_data.data)
