@@ -46,5 +46,8 @@ def send_message(request):
 def receive_message(request):
     messages = RoomMessage.objects.all()
     for data in messages:
-        serialize_data = RoomMessageSerializer(data)
-        return Reponse(serializer_data.data)
+        if data:
+            serialize_data = RoomMessageSerializer(data)
+            return Reponse(serializer_data.data)
+        else:
+            return ('No message for this chat room');
