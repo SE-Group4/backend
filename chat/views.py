@@ -1,9 +1,11 @@
 import json
+import os
 
 from rest_framework import viewsets, permissions
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParsers
 
 from rooms.models import Room
 from .models import RoomMessage, PrivateMessage
@@ -51,3 +53,9 @@ def receive_message(request):
             return Reponse(serializer_data.data)
         else:
             return ('No message for this chat room');
+       
+@api_view(['POST'])
+def send_files(request):
+    parser_classes = [MultiPartParser]
+    files = request.data['file']
+    return file
